@@ -4,15 +4,15 @@
 \alias{make_lower_tri_matrix}
 \title{Matrix from lower triangular entries vector}
 \usage{
-make_lower_tri_matrix(n, omega)
+make_lower_tri_matrix(r, omega)
 }
 \arguments{
-\item{n}{Integer. Size of the output matrix}
+\item{r}{Integer. Size of the output matrix}
 
-\item{omega}{Numeric vector of size n(n+1)/2. Entries to make matrix.}
+\item{omega}{Numeric vector of size r(r+1)/2. Entries to make matrix.}
 }
 \value{
-An n x n lower triangular matrix with \code{omega} entries column-wise
+An r x r lower triangular matrix with \code{omega} entries column-wise
 }
 \description{
 Construct a lower triangular matrix from a vector of entries

@@ -4,10 +4,10 @@
 \alias{.diag_locs}
 \title{Indices of diagonal elements when in lower triangular vector}
 \usage{
-.diag_locs(n)
+.diag_locs(r)
 }
 \arguments{
-\item{n}{An integer. Dimenson of matrix}
+\item{r}{An integer. Dimension of matrix}
 }
 \description{
 Indices of diagonal elements when in lower triangular vector
