@@ -17,7 +17,7 @@
 #'
 #' @keywords internal
 .standardize <- function(x){
-  return((x - mean(x))/sd(x))
+  return((x - mean(x))/stats::sd(x))
 }
 
 #' Logit transformation
