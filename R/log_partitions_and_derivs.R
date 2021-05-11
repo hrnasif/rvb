@@ -1,6 +1,15 @@
+#' Log partition function
+#'
+#' @param model Character. Either "binomial" or "poisson"
+#' @param x Numeric. Probability for binomial, mean for poisson
+#' @param m Integer. Count for binomial
+#'
+#' @return Log partition function for the exponential family
+#'
+#' @export
 h0 <- function(model, x, m){
-  # Binomial/Bernoulli model
-  if(model == "Binomial"){
+  # binomial/bernoulli model
+  if(model == "binomial"){
     output <- m*log(1 + exp(x))
   }
 
@@ -11,8 +20,17 @@ h0 <- function(model, x, m){
   return(output)
 }
 
+#' First derivative of log partition
+#'
+#' @param model Character. Either "binomial" or "poisson"
+#' @param x Numeric. Probability for binomial, mean for poisson
+#' @param m Integer. Count for binomial
+#'
+#' @return First derivative of log partition function.
+#'
+#' @export
 h1 <- function(model, x, m){
-  if(model == "Binomial"){
+  if(model == "binomial"){
     output <- m/(1 + exp(-x))
   }
 
@@ -23,8 +41,17 @@ h1 <- function(model, x, m){
   return(output)
 }
 
+#' Second derivative of log partition
+#'
+#' @param model Character. Either "binomial" or "poisson"
+#' @param x Numeric. Probability for binomial, mean for poisson
+#' @param m Integer. Count for binomial
+#'
+#' @return Second derivative of log partition function.
+#'
+#' @export
 h2 <- function(model, x, m){
-  if (model == "Binomial"){
+  if (model == "binomial"){
     output <- m/(2 + exp(x) + exp(-x))
   }
 
@@ -35,6 +62,15 @@ h2 <- function(model, x, m){
   return(output)
 }
 
+#' Third derivative of log partition
+#'
+#' @param model Character. Either "binomial" or "poisson"
+#' @param x Numeric. Probability for binomial, mean for poisson
+#' @param m Integer. Count for binomial
+#'
+#' @return Third derivative of log partition function.
+#'
+#' @export
 h3 <- function(model, x, m){
   if (model == "Binomial"){
     output <- m*exp(-x)*(exp(-x) - 1)/(1 + exp(-x))^3
