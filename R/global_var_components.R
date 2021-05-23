@@ -32,7 +32,7 @@ global_var_components <- function(theta, n, p, r){
       Omega <- tcrossprod(W)
     }
 
-    return(list(log_diag_weighted_sum = log_diag_weighted_sum,
+    return(list(t1 = log_diag_weighted_sum,
                 beta = beta,
                 W = W,
                 Omega = Omega))

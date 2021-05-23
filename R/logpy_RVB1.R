@@ -2,7 +2,7 @@ logpy_RVB1 <- function(ttheta, y, X, Z, Zg, ZH, vbeta0, Sinv, model, m, n, p, r)
   global <- global_var_components(ttheta, n, p, r)
 
   if (r == 1){
-    L = global$log_diag_weighted_sum - 0.5 * Sinv * global$Omega -
+    L = global$t1 - 0.5 * Sinv * global$Omega -
       0.5 * crossprod(global$beta)/vbeta0
     for (i in 1:n){
       Xibeta = X[[i]] %*% global$beta
@@ -16,7 +16,7 @@ logpy_RVB1 <- function(ttheta, y, X, Z, Zg, ZH, vbeta0, Sinv, model, m, n, p, r)
     }
   }
   else{
-    L = global$log_diag_weighted_sum - 0.5*sum(Sinv*global$Omega) -
+    L = global$t1 - 0.5*sum(Sinv*global$Omega) -
       0.5*crossprod(global$beta)/vbeta0
     for (i in 1:n){
       Xibeta = X[[i]] %*% global$beta
