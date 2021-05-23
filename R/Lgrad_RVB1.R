@@ -57,5 +57,5 @@ Lgrad_RVB1 <- function(ttheta, y, X, Z, Zg, ZH, vbeta0, Sinv, model, n, p, r, d)
     A[.diag_locs(r)] = A[.diag_locs(r)] * diag(global$W) + global$rseq
     g[(n*r + p + 1):d] = A
   }
-  return(L = (L %>% drop()), g = g)
+  return(list(L = (L %>% drop()), g = g))
 }
