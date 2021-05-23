@@ -10,7 +10,9 @@
 #' @param n Numeric. Number of clusters.
 #' @param r Numeric. Number of local variables (dimensionality of random effects).
 #'
-#' @return List of precomputed vals.
+#' @return List of precomputed vals
+#'
+#' @keywords internal
 .ZgH <- function(y, Z, model, etahat, m, n, r){
   ZH <- vector(mode = "list", length = n)
   if (r == 1){
