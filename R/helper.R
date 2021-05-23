@@ -30,3 +30,15 @@
 .logit <- function(x){
   return(stats::qlogis(x))
 }
+
+
+#' Log determinant
+#'
+#' @param x A full rank square matrix
+#'
+#' @return log determinant of x
+#'
+#' @keywords internal
+.logdet <- function(x){
+  return(determinant(x, logarithm = T)[[1]][1])
+}
