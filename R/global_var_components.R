@@ -11,7 +11,8 @@
 #'
 #' @return List containing components needed to compute log joint density. In reverse order,
 #' includes the precision matrix Omega, its Cholesky decomposition W, the vector of fixed
-#' effects beta, and the weighted sum of the log diagonal of W.
+#' effects beta, the weighted sum of the log diagonal of W, and the sequence used to determine
+#' the weights.
 #' @export
 global_var_components <- function(theta, n, p, r){
     nu <- ifelse(r == 1, r, r + 1) # See Kass and Natarajan prior
@@ -19,7 +20,8 @@ global_var_components <- function(theta, n, p, r){
     omega <- theta[(n*r+p+1):length(theta)]
 
     if(r == 1){
-      log_diag_weighted_sum <- omega * (n + nu)
+      rseq <- n + nu
+      log_diag_weighted_sum <- omega * rseq
       W = exp(omega)
       Omega = W^2
     }
@@ -32,7 +34,8 @@ global_var_components <- function(theta, n, p, r){
       Omega <- tcrossprod(W)
     }
 
-    return(list(t1 = log_diag_weighted_sum,
+    return(list(rseq = rseq,
+                t1 = log_diag_weighted_sum,
                 beta = beta,
                 W = W,
                 Omega = Omega))
