@@ -14,7 +14,7 @@
 #' effects beta, and the weighted sum of the log diagonal of W.
 #' @export
 global_var_components <- function(theta, n, p, r){
-    nu <- r + 1
+    nu <- ifelse(r == 1, r, r + 1) # See Kass and Natarajan prior
     beta <- theta[(n*r+1):(n*r+p)]
     omega <- theta[(n*r+p+1):length(theta)]
 
