@@ -5,8 +5,10 @@ KNprior <- function(model, pred, Z, m = 1){
   Sm = matrix(0, r, r)
   startindex = c(1, 1+cumsum(vni)[1:n-1])
   endindex = cumsum(vni)
-  if (m == 1){ pred = pred*(1-pred)}
-  else{pred = rep(m, times = vni) * pred * (1 - pred) }
+  if (model = "binomial"){
+    if (m == 1){ pred = pred*(1-pred)}
+    else{pred = rep(m, times = vni) * pred * (1 - pred) }
+  }
 
   for(i in 1:n){
     Sm = Sm + crossprod(Z[[i]], pred[startindex[i]:endindex[i]]*Z[[i]])
