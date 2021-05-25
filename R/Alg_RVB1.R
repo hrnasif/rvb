@@ -65,16 +65,16 @@ Alg_RVB1 <- function(y, X, Z, Wprior, etahat, model, m = 1){
       j = it/Interval
       par[j] = meanLB
       gradlr = GLB(j, tol, par)
-      cat("Iteration:", it, " meanLB=", round(meanLB, 3), " gradlr=", round(gradlr,3), "\n")
+      cat("Iteration:", it, " meanLB=", round(meanLB, 3), " gradlr=", round(gradlr,3))
       meanLB = 0
-      cat(round(mu[(n*r+1):d], 2))
+      cat(" mean=",round(mu[(n*r+1):d], 2),"\n")
     }
   }
   end_time = Sys.time()
   dur = end_time - start_time
   par = par[1:j]
   LB = LB_RVB1(mu, C, y, X, Z, Zg_ZH$Zg, Zg_ZH$ZH, vbeta0, Sinv, model, m, n, p, r, d)
-  cat("Final LB:", LB)
+  cat("Final LB:", LB, " Duration:", dur)
 
   return(list(C = C, mu = mu, par = par, dur = dur, LB = LB))
 }
