@@ -65,7 +65,7 @@ Alg_RVB1 <- function(y, X, Z, Wprior, etahat, model, m = 1){
       j = it/Interval
       par[j] = meanLB
       gradlr = GLB(j, tol, par)
-      cat("Iteration:", it, " meanLB=", round(meanLB, 3), " gradlr=", round(gradlr,3))
+      cat("Iteration:", it, " meanLB=", round(meanLB, 3), " gradlr=", round(gradlr,3), "\n")
       meanLB = 0
       cat(round(mu[(n*r+1):d], 2))
     }

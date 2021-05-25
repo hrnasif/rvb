@@ -10,7 +10,7 @@ logpy_RVB1 <- function(ttheta, y, X, Z, Zg, ZH, vbeta0, Sinv, model, m, n, p, r)
       Lit = sqrt(Lambdai)
       bi = Lambdai * (Zg[i] - crossprod(ZH[[i]], Xibeta))
       bi = bi + Lit*ttheta[i]
-      etai = Xibeta + Z[[i]]*bi
+      etai = Xibeta + Z[[i]] %*% bi
       L = L + crossprod(y[[i]], etai) - sum(h0(model, etai, m[i])) + log(Lit) -
         0.5*global$Omega*bi^2
     }

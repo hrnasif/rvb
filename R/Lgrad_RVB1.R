@@ -13,7 +13,7 @@ Lgrad_RVB1 <- function(ttheta, y, X, Z, Zg, ZH, vbeta0, Sinv, model, n, p, r, d)
       lambda_i = Lambdai * (Zg[i] - crossprod(ZH[[i]], Xibeta))
       bi = Lit*tbi + lambda_i
       etai = Xibeta = Z[[i]] %*% bi
-      ai = Omega * bi
+      ai = global$Omega * bi
       L = L + crossprod(y[[i]], etai) - sum(h0(model, etai, m[i])) + log(Lit) -
         0.5*bi*ai
       gi = y[[i]] - h1(model, etai, m[i])
