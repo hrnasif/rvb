@@ -1,3 +1,22 @@
+#' Log joint density under RVB1
+#'
+#' @param ttheta Numeric vector. All global and local variables.
+#' @param y List. Responses per cluster
+#' @param X List. Covariates per cluster for fixed effects
+#' @param Z List. Covariates per cluster for random effects
+#' @param Zg Vector or Matrix. Precomputed value
+#' @param ZH List. Precomputed value
+#' @param vbeta0 Numeric. Prior variance for fixed effects
+#' @param Sinv Matrix. Inverse of prior covariance matrix for random effects
+#' @param model Character. Either "poisson" or "binomial"
+#' @param m Integer. Number of trials if "binomial"
+#' @param n Integer. Number of clusters
+#' @param p Integer. Number of fixed effects
+#' @param r Integer. Number of random effects
+#'
+#' @return Log joint density under RVB1 model reparameterization
+#'
+#' @export
 logpy_RVB1 <- function(ttheta, y, X, Z, Zg, ZH, vbeta0, Sinv, model, m, n, p, r){
   global <- global_var_components(ttheta, n, p, r)
 
