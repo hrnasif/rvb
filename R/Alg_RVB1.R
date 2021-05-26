@@ -1,3 +1,17 @@
+#' RVB1 Algorithm implementation
+#'
+#' @param y List. Responses per cluster
+#' @param X List. Covariates per cluster for fixed effects
+#' @param Z List. Covariates per cluster for random effects
+#' @param Wprior List. Wishart prior for random effect covariance
+#' @param etahat List. Estimate of canonical parameter about which to approximate
+#' @param model Character. Either "poisson" or "binomial"
+#' @param m Integer. Number of trials if model is binomial. Keep m = 1 if model is "poisson"
+#'
+#' @return List containing posterior covariance C, posterior mean mu, the ELBO values per
+#' each 1000 iterations, the run duration, and the final ELBO value.
+#'
+#' @export
 Alg_RVB1 <- function(y, X, Z, Wprior, etahat, model, m = 1){
   start_time = Sys.time()
 

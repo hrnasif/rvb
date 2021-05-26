@@ -1,3 +1,18 @@
+#' Sample from posterior under RVB1
+#'
+#' @param RVB List. Output from Alg_RVB1
+#' @param y List. Responses per cluster
+#' @param X List. Covariates per cluster for fixed effects
+#' @param Z List. Covariates per cluster for random effects#'
+#' @param etahat List. Estimate of canonical parameter about which to approximate
+#' @param N Integer. Sample size
+#' @param L Integer. Number of clusters
+#' @param model Character. Either "poisson" or "binomial"
+#' @param m Positive integer. Number of trials in binomial. If poisson, keep as m = 1.
+#'
+#' @return Matrix of posterior samples
+
+#' @export
 postb_RVB1_b1 <- function(RVB, y, X, Z, etahat, N, L, model, m = 1){
   n = length(y)
   p = ncol(X[[1]])

@@ -1,3 +1,12 @@
+#' Gradient of least squares regression line
+#'
+#' @param j Iteration in thousands.
+#' @param tol Iteration tolerance
+#' @param par parameter
+#'
+#' @return Gradient of least squares regression line fitted to the last means.
+
+#' @export
 GLB <- function(j, tol, par){
   gradlr = 1
   if (1 < j & j <= tol){
