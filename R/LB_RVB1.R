@@ -2,7 +2,6 @@
 #'
 #' @param mu Vector. Mean in variational approximation
 #' @param C Lower triangular matrix. Cholesky decomposition of variance
-#' @param ttheta Numeric vector. All global and local variables.
 #' @param y List. Responses per cluster
 #' @param X List. Covariates per cluster for fixed effects
 #' @param Z List. Covariates per cluster for random effects
@@ -15,6 +14,7 @@
 #' @param n Integer. Number of clusters
 #' @param p Integer. Number of fixed effects
 #' @param r Integer. Number of random effects
+#' @param d Integer. Total number of variables
 #' @param N Integer. Number of iterations for ELBO average.
 #'
 #' @return Value of the evidence lower bound based on RVB1 optimization
