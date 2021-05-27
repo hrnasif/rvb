@@ -17,7 +17,7 @@ Alg_RVB1 <- function(y, X, Z, Wprior, etahat, model, m = 1){
 
   Interval = 1000
   tol = 6
-  Tr = 1.5e5
+  Tr = 1.5e5 # max number of iterations
   n = length(y)
   p = ncol(X[[1]])
   r = ncol(Z[[1]])
