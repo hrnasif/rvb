@@ -1,3 +1,13 @@
+#' Kass and Natarajan prior for random effects precision matrix
+#'
+#' @param model Character. Either "poisson" or "binomial"
+#' @param pred Vector. GLM predictions in y-scale
+#' @param Z List. Covariates for random effects
+#' @param Integer. Number of trials if model = "binomial". If "poisson", leave as 1.
+#'
+#' @return List containing Wishart prior parameter nu, S-inverse, and S
+#'
+#' @export
 KNprior <- function(model, pred, Z, m = 1){
   n = length(Z)
   r = ncol(Z[[1]])

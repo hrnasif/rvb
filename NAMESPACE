@@ -3,6 +3,7 @@
 export(Alg_RVB1)
 export(Alg_RVB2)
 export(GLB)
+export(KNprior)
 export(LB_RVB1)
 export(LB_RVB2)
 export(Lgrad_RVB1)
