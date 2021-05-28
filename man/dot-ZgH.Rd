@@ -25,6 +25,6 @@
 List of precomputed vals
 }
 \description{
-See \lambda_i in equation 7 of Tan (2021).
+See lambda_i in equation 7 of Tan (2021).
 }
 \keyword{internal}

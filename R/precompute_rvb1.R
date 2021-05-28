@@ -1,6 +1,6 @@
 #' Precompute for RVB1.
 #'
-#' See \lambda_i in equation 7 of Tan (2021).
+#' See lambda_i in equation 7 of Tan (2021).
 #'
 #' @param y List of numeric vectors. y[[i]] is the response vector for cluster i.
 #' @param Z List of vectors (r = 1) or matrices. Z[[i]] is the Z matrix for cluster i.
