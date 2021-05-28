@@ -11,7 +11,7 @@
 #' @param m Positive integer. Number of trials in binomial. If poisson, keep as m = 1.
 #'
 #' @return Matrix of posterior samples
-
+#'
 #' @export
 postb_RVB1_b1 <- function(RVB, y, X, Z, etahat, N, L, model, m = 1){
   n = length(y)

@@ -4,8 +4,8 @@
 #'
 #' @return data centered at 0
 #'
-#' @keywords internal
-.center <- function(x){
+#' @export
+center <- function(x){
   return(x - mean(x))
 }
 
@@ -15,8 +15,8 @@
 #'
 #' @return data with mean 0 and std 1
 #'
-#' @keywords internal
-.standardize <- function(x){
+#' @export
+standardize <- function(x){
   return((x - mean(x))/stats::sd(x))
 }
 
