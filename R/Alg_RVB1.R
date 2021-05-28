@@ -48,7 +48,6 @@ Alg_RVB1 <- function(y, X, Z, Wprior, etahat, model, m = 1){
   mtCstar = numeric(nz); vtCstar = numeric(nz); # Same for Cstar
   meanLB = 0; it = 0; gradlr = 1; j = 0;
 
-  set.seed(572)
   while ((it < Tr) & (gradlr > 0)){
     it = it + 1
     s = stats::rnorm(d)

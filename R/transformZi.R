@@ -7,7 +7,7 @@
 #'@keywords internal
 .transformZi <- function(Zi){
   if(ncol(Zi) == 1){
-    Zi = Zi/crossprod(Zi)
+    Zi = Zi/(crossprod(Zi) %>% drop())
   }
   else{
     Zi = solve(crossprod(Zi), t(Zi))
