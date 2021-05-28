@@ -22,7 +22,7 @@
 #' @export
 Lgrad_RVB2 <- function(ttheta, y, X, Z, Zt, Zy, etahat, vbeta0, Sinv, model, m, n, p, r, d){
   global <- global_var_components(ttheta, n, p, r)
-  ti <- global$ti; beta <- global$beta; rseq <- global$rseq;
+  t1 <- global$log_diag_weighted_sum; beta <- global$beta; rseq <- global$rseq;
   W <- global$W; Omega <- global$Omega
 
   L = t1 - 0.5*sum(Sinv*Omega) - 0.5*crossprod(beta)/vbeta0 # log joint density

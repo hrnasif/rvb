@@ -22,7 +22,7 @@ logpy_RVB2 <- function(ttheta, y, X, Z, Zt, Zy, etahat, vbeta0, Sinv, model, m,
                        n, p, r){
 
   global <- global_var_components(ttheta, n, p, r)
-  t1 = global$ti; beta = global$beta; Omega = global$Omega;
+  t1 = global$log_diag_weighted_sum; beta = global$beta; Omega = global$Omega;
 
   L = t1 - 0.5*sum(Sinv * Omega) - 0.5 * crossprod(beta)/vbeta0
 
