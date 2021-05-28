@@ -23,21 +23,19 @@ Alg_RVB2 <- function(y, X, Z, Wprior, etahat, model, m = 1){
   r = ncol(Z[[1]])
   G = p + 0.5*r*(r+1)
   d = n*r + G
+
   if (m == 1){ m = rep(1, n)}
   vni <- sapply(y, length) %>% unname() # Observations for each cluster
-
-  if (m == 1){ m = rep(1,n)}
 
   if (r == 1){
     Zt = lapply(Z, function(x){x*0})
     Zy = mapply(crossprod, Z, y)
-  }
-  else{
+  } else{
     Zt = lapply(Z, function(x){t(x)*0})
     Zy = mapply(crossprod, Z, y)
   }
 
-  Zt[vni >= r] = lapply(Zt[vni >= r], .transformZi)
+  Zt[vni >= rep(r,n)] = lapply(Z[vni >= rep(r,n)], .transformZi)
   indices <- indices_for_posterior_covariance(n, r, p)
   I = indices$row_indices; J = indices$col_indices
   Cdiag = which(I == J)

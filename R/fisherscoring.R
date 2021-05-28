@@ -16,7 +16,7 @@
 fisherscoring <- function(etahati, Zyi, Zi, Zti, Xibeta, Omega, model, mi){
   dif = 1; it = 0;
   if (ncol(Zti) == 1){
-    bihat = crossprod(Zit, etahati - Xibeta)
+    bihat = crossprod(Zti, etahati - Xibeta)
     Ciold = biConditional(bihat, Zyi, Zi, Xibeta, Omega, model, mi)
     while (dif > 1e-4 & it <= 8){
       it = it+1
@@ -34,7 +34,8 @@ fisherscoring <- function(etahati, Zyi, Zi, Zti, Xibeta, Omega, model, mi){
     while (dif > 1e-4 & it <= 8){
       it = it+1
       etahati = Xibeta + Zi %*% bihat
-      Lambdai_inv = Omega + crossprod(h2(model, etahati, mi)*Zi, Zi)
+      Zhi = diag(h2(model, etahati, mi))*Zi
+      Lambdai_inv = Omega + crossprod(Zhi, Zi)
       Lambdai_inv = chol(Lambdai_inv) %>% chol2inv()
       bihat = bihat + Lambdai_inv %*% (Zyi - crossprod(Zi, h1(model, etahati,mi)) -
                                         Omega %*% bihat)

@@ -22,7 +22,7 @@
 #' @export
 Lgrad_RVB2 <- function(ttheta, y, X, Z, Zt, Zy, etahat, vbeta0, Sinv, model, m, n, p, r, d){
   global <- global_var_components(ttheta, n, p, r)
-  t1 <- global$log_diag_weighted_sum; beta <- global$beta; rseq <- global$rseq;
+  t1 <- global$t1; beta <- global$beta; rseq <- global$rseq;
   W <- global$W; Omega <- global$Omega
 
   L = t1 - 0.5*sum(Sinv*Omega) - 0.5*crossprod(beta)/vbeta0 # log joint density
@@ -32,8 +32,8 @@ Lgrad_RVB2 <- function(ttheta, y, X, Z, Zt, Zy, etahat, vbeta0, Sinv, model, m, 
   if (r == 1){
     for (i in 1:n){
       tbi = ttheta[i]
-      Xibeta = X[i]%*%beta
-      bhati = fisherscoring(etahat[[i]], Zy[[i]], Z[[i]], Zt[[i]], Xibeta, Omega, m[i])
+      Xibeta = X[[i]]%*%beta
+      bhati = fisherscoring(etahat[[i]], Zy[[i]], Z[[i]], Zt[[i]], Xibeta, Omega, model, m[i])
       etahati = Xibeta + Z[[i]] %*% bhati
       ZHi = h2(model, etahati, m[i]) * Z[[i]]
       Lambdai = 1/(Omega + crossprod(ZHi, Z[[i]]))
@@ -45,11 +45,11 @@ Lgrad_RVB2 <- function(ttheta, y, X, Z, Zt, Zy, etahat, vbeta0, Sinv, model, m, 
       gi = y[[i]] - h1(model, etai, m[i])
       ai = ai + crossprod(Z[[i]], gi)
       gbi = Lit * ai
-      t1 = Lambdai*(1 + gbi*tbi)
+      t1 = (Lambdai*(1 + gbi*tbi)) %>% drop()
       t2 = t1*(Z[[i]]^2) * h3(model, etahati, m[i])
       ai = ai - 0.5*crossprod(Z[[i]], t2)
-      ai = Lambdai*ai
-      S1 = S1 + crossprod(X[[i]], gi - ai*Zhi - 0.5*t2) # for beta
+      ai = (Lambdai*ai) %>% drop()
+      S1 = S1 + crossprod(X[[i]], gi - ai*ZHi - 0.5*t2) # for beta
       Sinv = Sinv + 2*ai*bhati + bi^2 + t1
       g[i] = gbi
     }
@@ -61,9 +61,9 @@ Lgrad_RVB2 <- function(ttheta, y, X, Z, Zt, Zy, etahat, vbeta0, Sinv, model, m, 
     for (i in 1:n){
       tbi = ttheta[((i - 1)*r + 1):(i*r)]
       Xibeta = X[[i]] %*% beta
-      bhati = fisherscoring(etahat[[i]], Zy[,i], Z[[i]], Zt[[i]], Xibeta, Omega, m[i])
+      bhati = fisherscoring(etahat[[i]], Zy[,i], Z[[i]], Zt[[i]], Xibeta, Omega, model, m[i])
       etahati = Xibeta + Z[[i]] %*% bhati
-      ZHi = h2(model, etahati, m[i]) * Z[[i]]
+      ZHi = diag(h2(model, etahati, m[i])) * Z[[i]]
       Lambdai = (Omega + crossprod(ZHi, Z[[i]])) %>% chol() %>% chol2inv()
       Lit = chol(Lambdai)
       bi = crossprod(Lit, tbi) + bhati
@@ -74,9 +74,9 @@ Lgrad_RVB2 <- function(ttheta, y, X, Z, Zt, Zy, etahat, vbeta0, Sinv, model, m, 
       ai = ai + crossprod(Z[[i]], gi)
       gbi = Lit %*% ai
       gbi_tbi <- tcrossprod(gbi, tbi)
-      gbi_tbi[upper.tri(gbi_tbi)] = gbi_tbi[lower.tri(ai_tbi)] # Make symmetric
+      gbi_tbi[upper.tri(gbi_tbi)] = gbi_tbi[lower.tri(gbi_tbi)] # Make symmetric
       t1 = Lambdai + crossprod(Lit, gbi_tbi %*% Lit)
-      t2 = 0.5*diag(tcrossprod(Z[[i]] %*% ti, Z[[i]])) * h3(model, etahati, m[i])
+      t2 = 0.5*diag(tcrossprod(Z[[i]] %*% t1, Z[[i]])) * h3(model, etahati, m[i])
       ai = ai - crossprod(Z[[i]], t2)
       ai = Lambdai %*% ai
       S1 = S1 + crossprod(X[[i]], gi - ZHi %*% ai - t2)

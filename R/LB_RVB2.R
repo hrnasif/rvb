@@ -30,4 +30,5 @@ LB_RVB2 <- function(mu, C, y, X, Z, Zt, Zy, etahat, vbeta0, Sinv, model, m, n, p
     LB = LB + (logpy_RVB2(ttheta, y, X, Z, Zt, Zy, etahat, vbeta0, Sinv, model, m, n, p, r) +
       sum(log(diag(C))) + 0.5* crossprod(s))/N
   }
+  return(LB)
 }

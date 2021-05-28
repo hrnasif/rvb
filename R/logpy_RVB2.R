@@ -22,7 +22,7 @@ logpy_RVB2 <- function(ttheta, y, X, Z, Zt, Zy, etahat, vbeta0, Sinv, model, m,
                        n, p, r){
 
   global <- global_var_components(ttheta, n, p, r)
-  t1 = global$log_diag_weighted_sum; beta = global$beta; Omega = global$Omega;
+  t1 = global$t1; beta = global$beta; Omega = global$Omega;
 
   L = t1 - 0.5*sum(Sinv * Omega) - 0.5 * crossprod(beta)/vbeta0
 
@@ -43,7 +43,7 @@ logpy_RVB2 <- function(ttheta, y, X, Z, Zt, Zy, etahat, vbeta0, Sinv, model, m,
       Xibeta = X[[i]] %*% beta
       bhati = fisherscoring(etahat[[i]], Zy[,i], Z[[i]], Zt[[i]], Xibeta, Omega, model, m[i])
       etahati = Xibeta + Z[[i]] %*% bhati
-      Zhi = h2(model, etahati, m[i]) * Z[[i]]
+      Zhi = diag(h2(model, etahati, m[i])) * Z[[i]]
       Lambdai = (Omega + crossprod(Zhi, Z[[i]])) %>% chol() %>% chol2inv()
       Lit = chol(Lambdai)
       bi = crossprod(Lit, ttheta[((i - 1)*r + 1): (i*r)]) + bhati
