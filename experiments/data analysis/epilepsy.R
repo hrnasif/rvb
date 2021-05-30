@@ -3,7 +3,7 @@ library(INLA)
 library(rstan)
 library(tidyverse)
 
-setwd("")
+setwd("experiments/data analysis/")
 ################################################################################
 
 
@@ -86,7 +86,7 @@ stan_data_1 <- list(M = n*4, N = n, K = 4, P = p, R = r, y = yvec,
                   nu = Wprior1$nu, S = (Wprior1$S %>% as.matrix()),
                   binom = 0, n_binom = 1)
 
-stan1 <- stan(file = "/poisson.stan",
+stan1 <- stan(file = "../stan/glmm.stan",
               data = stan_data_1, chains = 4, iter = 25000, warmup = 12500,
               cores = 4)
 
@@ -152,7 +152,7 @@ stan_data_2 <- list(M = n*4, N = n, K = 4, P = p, R = r, y = yvec,
                     nu = Wprior2$nu, S = (Wprior2$S %>% as.matrix()),
                     binom = 0, n_binom = 1)
 
-stan2 <- stan(file = "research-prelim/RVB-Author-Code/epilepsy/poisson.stan",
+stan2 <- stan(file = "../stan/glmm.stan",
               data = stan_data_2, chains = 4, iter = 25000, warmup = 12500,
               cores = 4)
 
