@@ -84,7 +84,7 @@ summary(INLA1)
 stan_data_1 <- list(M = n*4, N = n, K = 4, P = p, R = r, y = yvec,
                   x = X, z = Z, sdbeta0 = 10,
                   nu = Wprior1$nu, S = (Wprior1$S %>% as.matrix()),
-                  binom = 0, n_binom = 1)
+                  binom = 0, n_binom = rep(1,n))
 
 stan1 <- stan(file = "../stan/glmm.stan",
               data = stan_data_1, chains = 4, iter = 25000, warmup = 12500,
@@ -150,7 +150,7 @@ summary(INLA2)
 stan_data_2 <- list(M = n*4, N = n, K = 4, P = p, R = r, y = yvec,
                     x = X, z = Z, sdbeta0 = 10,
                     nu = Wprior2$nu, S = (Wprior2$S %>% as.matrix()),
-                    binom = 0, n_binom = 1)
+                    binom = 0, n_binom = rep(1,n))
 
 stan2 <- stan(file = "../stan/glmm.stan",
               data = stan_data_2, chains = 4, iter = 25000, warmup = 12500,

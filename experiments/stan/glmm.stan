@@ -18,14 +18,14 @@ data {
   int<lower = 1> K; // Number of observations in cluster
   int<lower = 1> P; // Number of fixed effect covariates
   int<lower = 1> R; // Number of random effect covariates
-  int<lower = 0> y[M]; // Response vector for each cluster 
+  int<lower = 0> y[M]; // Response vector for each cluster
   matrix[K,P] x[N]; // Fixed effect covariate matrix
   matrix[K,R] z[N]; // Random effect covariate matrix
   real<lower = 0> sdbeta0; // prior sd for beta
   int<lower = 1> nu; // Wishart prior
   matrix[R,R] S; // Wishart prior
   int<lower = 0, upper = 1> binom; // 1 if binomial, 0 if poisson
-  int<lower = 1> n_binom; // 
+  int<lower = 1> n_binom[N]; //
 }
 
 parameters {
@@ -44,12 +44,12 @@ model {
     } else{
       b[i] ~ multi_normal_prec(rep_vector(0, R), Omega);
     }
-    
+
     for (j in 1:K){
       if (binom == 0){
         y[((i-1)*K + j)] ~ poisson_log((x[i]*beta + z[i]*b[i])[j]);
       } else{
-        y[((i-1)*K + j)] ~ binomial_logit(n_binom, (x[i]*beta + z[i]*b[i])[j]);
+        y[((i-1)*K + j)] ~ binomial_logit(n_binom[i], (x[i]*beta + z[i]*b[i])[j]);
       }
     }
   }
