@@ -24,7 +24,7 @@ Alg_RVB2 <- function(y, X, Z, Wprior, etahat, model, m = 1){
   G = p + 0.5*r*(r+1)
   d = n*r + G
 
-  if (m == 1){ m = rep(1, n)}
+  if (sum(m) == 1){ m = rep(1, n)}
   vni <- sapply(y, length) %>% unname() # Observations for each cluster
 
   if (r == 1){
