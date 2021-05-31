@@ -97,7 +97,7 @@ Alg_RVB2 <- function(y, X, Z, Wprior, etahat, model, m = 1){
   par = par[1:j]
 
   LB = LB_RVB2(mu, C, y, X, Z, Zt, Zy, etahat, vbeta0, Sinv, model, m, n, p, r, d)
-  cat("Final LB:", LB, " Duration:", dur)
+  cat("Final LB:", LB, " Duration:", dur, "\n")
 
   return(list(C = C, mu = mu, par = par, dur = dur, LB = LB))
 }

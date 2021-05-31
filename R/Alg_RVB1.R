@@ -87,7 +87,7 @@ Alg_RVB1 <- function(y, X, Z, Wprior, etahat, model, m = 1){
   dur = end_time - start_time
   par = par[1:j]
   LB = LB_RVB1(mu, C, y, X, Z, Zg_ZH$Zg, Zg_ZH$ZH, vbeta0, Sinv, model, m, n, p, r, d)
-  cat("Final LB:", LB, " Duration:", dur)
+  cat("Final LB:", LB, " Duration:", dur, "\n")
 
   return(list(C = C, mu = mu, par = par, dur = dur, LB = LB))
 }
