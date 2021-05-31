@@ -16,8 +16,7 @@ KNprior <- function(model, pred, Z, m = 1){
   startindex = c(1, 1+cumsum(vni)[1:n-1])
   endindex = cumsum(vni)
   if (model == "binomial"){
-    if (length(m) == 1 & m == 1){ pred = pred*(1-pred)}
-    else if(length(m) == 1){pred = rep(m, times = vni)*pred*(1 - pred)}
+    if(length(m) == 1){pred = rep(m, times = vni)*pred*(1 - pred)}
     else{pred = m * pred * (1 - pred) }
   }
 

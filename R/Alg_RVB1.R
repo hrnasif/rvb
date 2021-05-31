@@ -23,7 +23,7 @@ Alg_RVB1 <- function(y, X, Z, Wprior, etahat, model, m = 1){
   r = ncol(Z[[1]])
   G = p + 0.5*r*(r+1)
   d = n*r + G
-  if (sum(m) == 1){ m = rep(1, n)}
+  if (length(m) == 1){ m = rep(m, n)}
 
   indices <-  indices_for_posterior_covariance(n,r,p) # indices for nonzero elmnts in C
   I = indices$row_indices
