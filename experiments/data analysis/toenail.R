@@ -51,8 +51,8 @@ pred <- predict(toenail_glm, type = "response")
 toenailPrior <- rvb::KNprior(model, pred, Z)
 
 # Run RVB
-toenailRVB1 <- rvb::Alg_RVB1(y, X, Z, toenailPrior, etahat, model, m)
-toenailRVB2 <- rvb::Alg_RVB2(y, X, Z, toenailPrior, etahat, model, m)
+toenailRVB1 <- rvb::Alg_RVB1(y, X, Z, toenailPrior, etahat, model)
+toenailRVB2 <- rvb::Alg_RVB2(y, X, Z, toenailPrior, etahat, model)
 
 # INLA
 toenail.prior <- list(prec = list(param = c(toenailPrior$nu/2, toenailPrior$Sinv/2)))
