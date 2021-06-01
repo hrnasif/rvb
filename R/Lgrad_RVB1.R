@@ -9,6 +9,7 @@
 #' @param vbeta0 Numeric. Prior variance for fixed effects
 #' @param Sinv Matrix. Inverse of prior covariance matrix for random effects
 #' @param model Character. Either "poisson" or "binomial"
+#' @param m Integer. Number of trials if "binomial"
 #' @param n Integer. Number of clusters
 #' @param p Integer. Number of fixed effects
 #' @param r Integer. Number of random effects
@@ -17,7 +18,7 @@
 #' @return List including Log joint density and gradient of log joint density under RVB1
 
 #' @export
-Lgrad_RVB1 <- function(ttheta, y, X, Z, Zg, ZH, vbeta0, Sinv, model, n, p, r, d){
+Lgrad_RVB1 <- function(ttheta, y, X, Z, Zg, ZH, vbeta0, Sinv, model, m, n, p, r, d){
   global <- global_var_components(ttheta, n, p, r)
   L <- global$t1 - 0.5*sum(Sinv*global$Omega) - 0.5*crossprod(global$beta)/vbeta0
   g <- numeric(d)

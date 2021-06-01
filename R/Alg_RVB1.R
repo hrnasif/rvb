@@ -52,7 +52,7 @@ Alg_RVB1 <- function(y, X, Z, Wprior, etahat, model, m = 1){
     it = it + 1
     s = stats::rnorm(d)
     ttheta = mu + C %*% s
-    L_and_grad = Lgrad_RVB1(ttheta, y, X, Z, Zg_ZH$Zg, Zg_ZH$ZH, vbeta0, Sinv, model, n, p, r, d)
+    L_and_grad = Lgrad_RVB1(ttheta, y, X, Z, Zg_ZH$Zg, Zg_ZH$ZH, vbeta0, Sinv, model, m, n, p, r, d)
     meanLB = meanLB + (L_and_grad$L + 0.5*crossprod(s) + sum(log(diag(C))))/Interval
     L_and_grad$g = L_and_grad$g + solve(t(C), s)
 
