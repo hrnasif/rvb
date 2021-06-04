@@ -88,7 +88,7 @@ seed_stan_dt <- list(M = n, N = n, K = 1, P = p, R = r, y = response,
                     nu = seedsPrior$nu, S = (seedsPrior$S %>% as.matrix()),
                     binom = 1, n_binom = m)
 
-seed_stan <- stan(file = "../stan/glmm.stan",
+seed_stan <- stan(file = "experiments/stan/glmm.stan",
               data = seed_stan_dt, chains = 4, iter = 25000, warmup = 12500,
               cores = 4)
 
