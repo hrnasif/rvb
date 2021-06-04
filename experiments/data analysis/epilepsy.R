@@ -3,7 +3,7 @@ library(INLA)
 library(rstan)
 library(tidyverse)
 
-setwd("experiments/data analysis/")
+#setwd("experiments/data analysis/")
 ################################################################################
 
 
@@ -69,8 +69,8 @@ pred = predict(glmfit, type = "response")
 Wprior1 <- rvb::KNprior(model, pred, Z) # Getting prior
 
 # Run RVB1 and RVB2
-RVB1 <- Alg_RVB1(y, X, Z, Wprior1, etahat, model)
-RVB2 <- Alg_RVB2(y, X, Z, Wprior1, etahat, model)
+RVB1_int <- Alg_RVB1(y, X, Z, Wprior1, etahat, model)
+RVB2_int <- Alg_RVB2(y, X, Z, Wprior1, etahat, model)
 
 # Compare with INLA
 prec.prior <- list(prec = list(param = c(Wprior1$nu/2, Wprior1$Sinv/2)))
@@ -129,8 +129,8 @@ pred = predict(glmfit, type = "response")
 
 Wprior2 <- rvb::KNprior(model, pred, Z) # New prior
 
-RVB1 <- rvb::Alg_RVB1(y, X, Z, Wprior2, etahat, model, m = 1)
-RVB2 <- rvb::Alg_RVB2(y, X, Z, Wprior2, etahat, model, m = 1)
+RVB1_slope <- rvb::Alg_RVB1(y, X, Z, Wprior2, etahat, model, m = 1)
+RVB2_slope <- rvb::Alg_RVB2(y, X, Z, Wprior2, etahat, model, m = 1)
 
 
 # Compare with INLA
