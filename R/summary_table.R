@@ -36,7 +36,7 @@ summary_table <- function(RVB1, RVB2, INLA, stanfit, n, p, r){
   #Stan
   stan_sum <- rstan::summary(stanfit)
   mubeta[1:p + 3*p] <- stan_sum$summary[1:p,1] %>% as.numeric() %>% round(2)
-  sdbeta[1:p + 3*p] <- stan_sum$summary[1:p,2] %>% as.numeric() %>% round(2)
+  sdbeta[1:p + 3*p] <- stan_sum$summary[1:p,3] %>% as.numeric() %>% round(2)
   time[4]<- rstan::get_elapsed_time(stanfit) %>% rowSums() %>% mean() %>% round(2)
   LB[4] = NA
 
