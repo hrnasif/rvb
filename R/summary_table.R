@@ -3,7 +3,7 @@ summary_table <- function(RVB1, RVB2, INLA, stanfit, n, p, r){
 
   # Row and Column headers
   colnames(summary_matrix) <- c("RVB1", "RVB2", "INLA", "MCMC")
-  rownames(summary_matrix) <- c(paste0("$\\beta_", 1:p, "$"),
+  rownames(summary_matrix) <- c(paste0("$\\beta_", 0:(p-1), "$"),
                                 "time",
                                 "$\\widehat{\\mathcal{L}}$")
 
@@ -16,14 +16,14 @@ summary_table <- function(RVB1, RVB2, INLA, stanfit, n, p, r){
   mubeta[1:p] <- RVB1$mu[(n*r) + 1:p] %>% round(2)
   Cbeta_RVB1 <- RVB1$C[(n*r) + 1:p, (n*r) + 1:p]
   sdbeta[1:p] <- Cbeta_RVB1 %>% tcrossprod() %>% diag() %>% sqrt() %>% round(2)
-  time[1] <- as.difftime(RVB1$dur, unit = "secs") %>% as.numeric() %>% round(2)
+  time[1] <- RVB1$dur %>% as.numeric(units = "secs") %>% round(2)
   LB[1] <- RVB1$LB[1,1] %>% round(2)
 
   # Same for RVB2
   mubeta[1:p + p] <- RVB2$mu[(n*r) + 1:p] %>% round(2)
   Cbeta_RVB2 <- RVB2$C[(n*r) + 1:p, (n*r) + 1:p]
   sdbeta[1:p + p] <- Cbeta_RVB2 %>% tcrossprod() %>% diag() %>% sqrt() %>% round(2)
-  time[2] <- as.difftime(RVB2$dur, unit = "secs") %>% as.numeric() %>% round(2)
+  time[2] <- RVB2$dur %>% as.numeric(units = "secs") %>% round(2)
   LB[2] <- RVB2$LB[1,1] %>% round(2)
 
   # INLA

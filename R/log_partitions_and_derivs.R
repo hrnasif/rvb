@@ -72,7 +72,7 @@ h2 <- function(model, x, m){
 #'
 #' @export
 h3 <- function(model, x, m){
-  if (model == "Binomial"){
+  if (model == "binomial"){
     output <- m*exp(-x)*(exp(-x) - 1)/(1 + exp(-x))^3
   }
 
