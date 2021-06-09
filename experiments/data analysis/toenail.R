@@ -51,6 +51,7 @@ pred <- predict(toenail_glm, type = "response")
 toenailPrior <- rvb::KNprior(model, pred, Z)
 
 # Run RVB
+set.seed(407)
 toenailRVB1 <- rvb::Alg_RVB1(y, X, Z, toenailPrior, etahat, model)
 toenailRVB2 <- rvb::Alg_RVB2(y, X, Z, toenailPrior, etahat, model)
 
@@ -64,16 +65,18 @@ toenailINLA <- inla(Response ~ Treatment + Month + I(Treatment*Month) +
 summary(toenailINLA)
 
 # Compare with Stan
-seed_stan_dt <- list(M = n, N = n, K = 1, P = p, R = r, y = response,
+toenail_stan_dt <- list(M = n, N = n, K = yk, P = p, R = r, y = response,
                      x = X, z = Z, sdbeta0 = 10,
                      nu = toenailPrior$nu, S = (toenailPrior$S %>% as.matrix()),
                      binom = 1, n_binom = rep(1,n))
 
-seed_stan <- stan(file = "experiments/stan/glmm.stan",
-                  data = seed_stan_dt, chains = 4, iter = 25000, warmup = 12500,
+toenail_stan <- stan(file = "experiments/stan/glmm.stan",
+                  data = toenail_stan_dt, chains = 4, iter = 25000, warmup = 12500,
                   cores = 4)
 
-seed_stan_sum <- summary(seed_stan)
+toenail_stan_sum <- summary(toenail_stan)
 
-traceplot(seed_stan, pars = c("beta[1]", "beta[2]", "beta[3]"))
+traceplot(toenail_stan, pars = c("beta[1]", "beta[2]", "beta[3]", "beta[4]"))
 
+
+rvb::summary_table(toenailRVB1, toenailRVB2, toenailINLA, toenail_stan, n, p, r)

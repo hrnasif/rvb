@@ -70,6 +70,7 @@ pred <- predLong[startindex] # predictions for each cluster are all the same
 seedsPrior <- rvb::KNprior(model, pred, Z, m)
 
 # Run RVB
+set.seed(817)
 seedsRVB1 <- rvb::Alg_RVB1(y, X, Z, seedsPrior, etahat, model, m)
 seedsRVB2 <- rvb::Alg_RVB2(y, X, Z, seedsPrior, etahat, model, m)
 
@@ -96,3 +97,4 @@ seed_stan_sum <- summary(seed_stan)
 
 traceplot(seed_stan, pars = c("beta[1]", "beta[2]", "beta[3]"))
 
+rvb::summary_table(seedsRVB1, seedsRVB2, seedsINLA, seed_stan, n, p, r)

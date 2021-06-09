@@ -3,8 +3,6 @@ library(INLA)
 library(rstan)
 library(tidyverse)
 
-setwd("experiments/simulations/")
-
 model = "poisson"
 n = 500 # Number of clusters
 k = 7 # Observations per cluster
@@ -49,6 +47,9 @@ yvec = unlist(y)
 xvec = rep(x_ij, n)
 id = rep(1:n, each = k)
 
+mean(yvec == 0) # 83.8%
+mean(yvec <= 5) # 99.5%
+
 pois1df <- data.frame(y = yvec, x = xvec, id = id)
 
 pois1glm <- glm(y ~ x, data = pois1df, family = poisson)
@@ -73,13 +74,16 @@ pois1_standt <- list(M = n*k, N = n, K = k, P = p, R = r, y = yvec,
                      nu = pois1prior$nu, S = (pois1prior$S %>% as.matrix),
                      binom = 0, n_binom = rep(1,n))
 
-pois1_stanfit <- stan(file = "../stan/glmm.stan",
-                      data = pois1_standt, chains = 4, iter = 10000,
-                      warmup = 5000, cores = 4)
+pois1_stanfit <- stan(file = "experiments/stan/glmm.stan",
+                      data = pois1_standt, chains = 4, iter = 25000,
+                      warmup = 12500, cores = 4)
 
 pois1_stansum <- summary(pois1_stanfit)
 pois1_stansum$summary[1:2]
 
+traceplot(pois1_stanfit, pars = c("beta[1]", "beta[2]"))
+
+rvb::summary_table(pois1_RVB1, pois1_RVB2, pois1_INLA, pois1_stanfit, n, p, r)
 
 ##############################################################################
 
@@ -113,6 +117,13 @@ yvec = unlist(y)
 xvec = rep(x_ij, n)
 id = rep(1:n, each = k)
 
+mean(yvec == 0) # 14.6%
+mean(yvec == 1) # 12.3%
+mean(yvec == 2) # 9.62%
+mean(yvec == 3) # 8.23%
+mean(yvec == 4) # 5.83%
+mean(yvec >= 5) # 49.4%
+
 pois2df <- data.frame(y = yvec, x = xvec, id = id)
 
 pois2glm <- glm(y ~ x, data = pois2df, family = poisson)
@@ -137,9 +148,13 @@ pois2_standt <- list(M = n*k, N = n, K = k, P = p, R = r, y = yvec,
                      nu = pois2prior$nu, S = (pois2prior$S %>% as.matrix),
                      binom = 0, n_binom = rep(1,n))
 
-pois2_stanfit <- stan(file = "../stan/glmm.stan",
-                      data = pois2_standt, chains = 4, iter = 10000,
-                      warmup = 5000, cores = 4)
+pois2_stanfit <- stan(file = "experiments/stan/glmm.stan",
+                      data = pois2_standt, chains = 4, iter = 25000,
+                      warmup = 12500, cores = 4)
 
 pois2_stansum <- summary(pois2_stanfit)
 pois2_stansum$summary[1:2]
+
+rvb::summary_table(pois2_RVB1, pois2_RVB2, pois2_INLA, pois2_stanfit, n, p, r)
+
+traceplot(pois2_stanfit, pars = c("beta[1]", "beta[2]"))

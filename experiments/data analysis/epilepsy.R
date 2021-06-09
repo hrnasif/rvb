@@ -3,7 +3,6 @@ library(INLA)
 library(rstan)
 library(tidyverse)
 
-#setwd("experiments/data analysis/")
 ################################################################################
 
 
@@ -69,8 +68,8 @@ pred = predict(glmfit, type = "response")
 Wprior1 <- rvb::KNprior(model, pred, Z) # Getting prior
 
 # Run RVB1 and RVB2
-RVB1_int <- Alg_RVB1(y, X, Z, Wprior1, etahat, model)
-RVB2_int <- Alg_RVB2(y, X, Z, Wprior1, etahat, model)
+#RVB1_int <- Alg_RVB1(y, X, Z, Wprior1, etahat, model)
+#RVB2_int <- Alg_RVB2(y, X, Z, Wprior1, etahat, model)
 
 # Compare with INLA
 prec.prior <- list(prec = list(param = c(Wprior1$nu/2, Wprior1$Sinv/2)))
@@ -78,7 +77,9 @@ INLA1 <- inla(sz ~ lb4 + trt + I(lb4*trt) + clage + V4 + f(id, model = "iid",
                                                            hyper = prec.prior),
               data = df, control.predictor = list(compute = T),
               family = "poisson")
-summary(INLA1)
+
+INLA1_sum <- summary(INLA1)
+INLA1_sum$fixed
 
 # Compare with Stan
 stan_data_1 <- list(M = n*4, N = n, K = 4, P = p, R = r, y = yvec,
@@ -86,7 +87,7 @@ stan_data_1 <- list(M = n*4, N = n, K = 4, P = p, R = r, y = yvec,
                   nu = Wprior1$nu, S = (Wprior1$S %>% as.matrix()),
                   binom = 0, n_binom = rep(1,n))
 
-stan1 <- stan(file = "../stan/glmm.stan",
+stan1 <- stan(file = "experiments/stan/glmm.stan",
               data = stan_data_1, chains = 4, iter = 25000, warmup = 12500,
               cores = 4)
 
@@ -94,6 +95,8 @@ stan1sum <- summary(stan1)
 
 traceplot(stan1, pars = c("beta[1]", "beta[2]", "beta[3]", "beta[4]", "beta[5]",
                           "beta[6]"))
+
+rvb::summary_table(RVB1_int, RVB2_int, INLA1, stan1, n, p, r)
 
 
 
@@ -152,11 +155,13 @@ stan_data_2 <- list(M = n*4, N = n, K = 4, P = p, R = r, y = yvec,
                     nu = Wprior2$nu, S = (Wprior2$S %>% as.matrix()),
                     binom = 0, n_binom = rep(1,n))
 
-stan2 <- stan(file = "../stan/glmm.stan",
+stan2 <- stan(file = "experiments/stan/glmm.stan",
               data = stan_data_2, chains = 4, iter = 25000, warmup = 12500,
               cores = 4)
 
 stan2sum <- summary(stan2)
+
+rvb::summary_table(RVB1_slope, RVB2_slope, INLA2, stan2, n, p, r)
 
 traceplot(stan2, pars = c("beta[1]", "beta[2]", "beta[3]", "beta[4]", "beta[5]",
                           "beta[6]"))

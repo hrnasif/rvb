@@ -3,9 +3,6 @@ library(INLA)
 library(rstan)
 library(tidyverse)
 
-setwd("experiments/simulations/")
-
-
 model = "binomial"
 n = 200 # Number of clusters. Decreased from sims in paper
 k = 7 # Observations per cluster
@@ -34,7 +31,7 @@ X = vector(mode = "list", length = n) # x_{ij} ~ binomial(0.5)
 Z = vector(mode = "list", length = n) # intercept and slope
 etahat = vector(mode = "list", length = n)
 
-set.seed(409)
+set.seed(4681)
 
 for (i in 1:n){
   bi1 = rnorm(1, 0, sigma1)
@@ -54,56 +51,60 @@ r = ncol(Z[[1]])
 
 # Obtain prior
 yvec = unlist(y)
-xvec1 = sapply(1:n, function(x){X[[x]][,2]}) %>% as.vector()
-xvec2 = sapply(1:n, function(x){X[[x]][,3]}) %>% as.vector()
+x1vec = sapply(1:n, function(x){X[[x]][,2]}) %>% as.vector()
+x2vec = sapply(1:n, function(x){X[[x]][,3]}) %>% as.vector()
 id = rep(1:n, each = k)
 
 binom1exdf <- data.frame(y = yvec, x1 = xvec1, x2 = xvec2, id = id)
 
 # transforming to long data for glm
-m_total <- m*k*n
+m_total <- m*n*k
 m_array <- rep(m, n*k)
-startindex <- c(1, cumsum(m_array)[-n] + 1)
+startindex <- c(1, cumsum(m_array)[-(n*k)] + 1)
 endindex <- cumsum(m_array)
 
-ylong <- numeric(m_total)
-idlong <- numeric(m_total)
+y_long <- numeric(m_total)
+id_long <- numeric(m_total)
 x1_long <- numeric(m_total)
 x2_long <- numeric(m_total)
 
 for (i in 1:n){
   for (j in 1:k){
-    rows <- startindex[i + (j-1)]:endindex[i + (j-1)]
-    ylong[rows] <- c(rep(1, yvec[i + (j-1)]), rep(0, m_array[i + (j-1)] - yvec[i + (j-1)]))
-    idlong[rows] <- rep(i, m[i + (j-1)])
-    x1_long[rows] <- rep(x1vec[i], m[i])
-    x2_long[rows] <- rep([i], m[i])
+    index <- (i-1)*k + j
+    rows <- startindex[index]:endindex[index]
+    y_long[rows] <- c(rep(1, yvec[index]), rep(0, m - yvec[index]))
+    id_long[rows] <- rep(i, m)
+    x1_long[rows] <- rep(x1vec[index], m)
+    x2_long[rows] <- rep(x2vec[index], m)
   }
 }
-y_long <- rep(yvec, each = k)
-x1_long <- rep(xvec1, each = k)
-x2_long <- rep(xvec2, each = k)
 
-binom1exglm <- glm(y_long ~ x1_long + x2_long, family = binomial)
+binom1exdf_long <- data.frame(y_long = y_long, x1_long = x1_long, x2_long = x2_long,
+                              id_long = id_long)
+
+binom1exglm <- glm(y_long ~ x1_long + x2_long, data = binom1exdf_long,
+                   family = binomial)
 binom1expred_long <- predict(binom1exglm, type = "response")
-binom1expred <- binom1expred_long[(c(1:n)*k)]
+binom1expred <- binom1expred_long[startindex]
 
 binom1exprior <- rvb::KNprior(model, binom1expred, Z)
 
 # Run RVB
 
-binom1ex_RVB1 <- rvb::Alg_RVB1(y, X, Z, binom1exprior, etahat, model)
-binom1ex_RVB2 <- rvb::Alg_RVB2(y, X, Z, binom1exprior, etahat, model)
+binom1ex_RVB1 <- rvb::Alg_RVB1(y, X, Z, binom1exprior, etahat, model, m)
+binom1ex_RVB2 <- rvb::Alg_RVB2(y, X, Z, binom1exprior, etahat, model, m)
 
 # INLA
-binom1exdf$id2 <- binom1exdf$id + n
+binom1exdf_long$id_long2 <- binom1exdf_long$id_long + n
 binom1ex_inlaprior <- list(theta1 = list(param = c(binom1exprior$nu,
                                                   binom1exprior$Sinv[1,1],
                                                   binom1exprior$Sinv[2,2],
                                                   binom1exprior$Sinv[1,2])))
 
-binom1ex_INLA <- inla(y ~ x1 + x2 + f(id, model = "iid2d", hyper = binom1ex_inlaprior, n = 2*n) +
-                       f(id2, x2, copy = "id"), data = binom1exdf, family = "binomial")
+binom1ex_INLA <- inla(y_long ~ x1_long + x2_long +
+                        f(id_long, model = "iid2d", hyper = binom1ex_inlaprior, n = 2*n) +
+                        f(id_long2, x2_long, copy = "id_long"),
+                      data = binom1exdf_long, family = "binomial")
 summary(binom1ex_INLA)
 
 # Stan
@@ -112,7 +113,7 @@ binom1ex_standt <- list(M = n*k, N = n, K = k, P = p, R = r, y = yvec,
                        nu = binom1exprior$nu, S = (binom1exprior$S %>% as.matrix),
                        binom = 1, n_binom = rep(m,n))
 
-binom1ex_stanfit <- stan(file = "../stan/glmm.stan",
+binom1ex_stanfit <- stan(file = "experiments/stan/glmm.stan",
                         data = binom1ex_standt, chains = 4, iter = 10000,
                         warmup = 8000, cores = 4)
 
@@ -191,7 +192,7 @@ binom2ex_standt <- list(M = n*k, N = n, K = k, P = p, R = r, y = yvec,
                        nu = binom2exprior$nu, S = (binom2exprior$S %>% as.matrix),
                        binom = 1, n_binom = rep(m,n))
 
-binom2ex_stanfit <- stan(file = "../stan/glmm.stan",
+binom2ex_stanfit <- stan(file = "experiments/stan/glmm.stan",
                         data = binom2ex_standt, chains = 4, iter = 10000,
                         warmup = 8000, cores = 4)
 

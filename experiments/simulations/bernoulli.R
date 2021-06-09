@@ -3,7 +3,6 @@ library(INLA)
 library(rstan)
 library(tidyverse)
 
-setwd("experiments/simulations/")
 
 
 model = "binomial"
@@ -50,6 +49,7 @@ yvec = unlist(y)
 xvec = sapply(1:n, function(x){X[[x]][,2]}) %>% as.vector()
 id = rep(1:n, each = k)
 
+
 bern1df <- data.frame(y = yvec, x = xvec, id = id)
 
 bern1glm <- glm(y ~ x, data = bern1df, family = binomial)
@@ -74,12 +74,15 @@ bern1_standt <- list(M = n*k, N = n, K = k, P = p, R = r, y = yvec,
                      nu = bern1prior$nu, S = (bern1prior$S %>% as.matrix),
                      binom = 1, n_binom = rep(1,n))
 
-bern1_stanfit <- stan(file = "../stan/glmm.stan",
-                      data = bern1_standt, chains = 4, iter = 10000,
-                      warmup = 5000, cores = 4)
+bern1_stanfit <- stan(file = "experiments/stan/glmm.stan",
+                      data = bern1_standt, chains = 4, iter = 25000,
+                      warmup = 12500, cores = 4)
 
 bern1_stansum <- summary(bern1_stanfit)
 bern1_stansum$summary[1:2]
+
+rvb::summary_table(bern1_RVB1, bern1_RVB2, bern1_INLA, bern1_stanfit,
+                   n, p, r)
 
 
 ##############################################################################
@@ -140,9 +143,12 @@ bern2_standt <- list(M = n*k, N = n, K = k, P = p, R = r, y = yvec,
                      nu = bern2prior$nu, S = (bern2prior$S %>% as.matrix),
                      binom = 1, n_binom = rep(1,n))
 
-bern2_stanfit <- stan(file = "../stan/glmm.stan",
-                      data = bern2_standt, chains = 4, iter = 10000,
-                      warmup = 5000, cores = 4)
+bern2_stanfit <- stan(file = "experiments/stan/glmm.stan",
+                      data = bern2_standt, chains = 4, iter = 25000,
+                      warmup = 12500, cores = 4)
 
 bern2_stansum <- summary(bern2_stanfit)
 bern2_stansum$summary[1:2]
+
+rvb::summary_table(bern2_RVB1, bern2_RVB2, bern2_INLA, bern2_stanfit,
+                   n, p, r)

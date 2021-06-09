@@ -3,8 +3,6 @@ library(INLA)
 library(rstan)
 library(tidyverse)
 
-setwd("experiments/simulations/")
-
 
 model = "binomial"
 n = 200 # Number of clusters. Decreased from sims in paper
@@ -86,13 +84,15 @@ bern1ex_standt <- list(M = n*k, N = n, K = k, P = p, R = r, y = yvec,
                      nu = bern1exprior$nu, S = (bern1exprior$S %>% as.matrix),
                      binom = 1, n_binom = rep(1,n))
 
-bern1ex_stanfit <- stan(file = "../stan/glmm.stan",
+bern1ex_stanfit <- stan(file = "experiments/stan/glmm.stan",
                       data = bern1ex_standt, chains = 4, iter = 10000,
                       warmup = 8000, cores = 4)
 
 bern1ex_stansum <- summary(bern1ex_stanfit)
 bern1ex_stansum$summary[1:3]
 
+rvb::summary_table(bern1ex_RVB1, bern1ex_RVB2, bern1ex_INLA, bern1ex_stanfit,
+                   n, p, r)
 
 ##############################################################################
 
@@ -165,7 +165,7 @@ bern2ex_standt <- list(M = n*k, N = n, K = k, P = p, R = r, y = yvec,
                      nu = bern2exprior$nu, S = (bern2exprior$S %>% as.matrix),
                      binom = 1, n_binom = rep(1,n))
 
-bern2ex_stanfit <- stan(file = "../stan/glmm.stan",
+bern2ex_stanfit <- stan(file = "experiments/stan/glmm.stan",
                       data = bern2ex_standt, chains = 4, iter = 10000,
                       warmup = 8000, cores = 4)
 
