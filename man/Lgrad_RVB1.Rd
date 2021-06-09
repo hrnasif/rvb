@@ -4,7 +4,7 @@
 \alias{Lgrad_RVB1}
 \title{Log joint density and gradient for RVB1}
 \usage{
-Lgrad_RVB1(ttheta, y, X, Z, Zg, ZH, vbeta0, Sinv, model, n, p, r, d)
+Lgrad_RVB1(ttheta, y, X, Z, Zg, ZH, vbeta0, Sinv, model, m, n, p, r, d)
 }
 \arguments{
 \item{ttheta}{Numeric vector. All global and local variables.}
@@ -24,6 +24,8 @@ Lgrad_RVB1(ttheta, y, X, Z, Zg, ZH, vbeta0, Sinv, model, n, p, r, d)
 \item{Sinv}{Matrix. Inverse of prior covariance matrix for random effects}
 
 \item{model}{Character. Either "poisson" or "binomial"}
+
+\item{m}{Integer. Number of trials if "binomial"}
 
 \item{n}{Integer. Number of clusters}
 
