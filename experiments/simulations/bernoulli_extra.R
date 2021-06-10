@@ -170,4 +170,4 @@ bern2ex_stanfit <- stan(file = "experiments/stan/glmm.stan",
                       warmup = 8000, cores = 4)
 
 bern2ex_stansum <- summary(bern2ex_stanfit)
-bern2ex_stansum$summary[1:3]
+bern2ex_stansum$summary[1:3,c(1,3)]

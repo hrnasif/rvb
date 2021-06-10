@@ -118,7 +118,7 @@ binom1ex_stanfit <- stan(file = "experiments/stan/glmm.stan",
                         warmup = 8000, cores = 4)
 
 binom1ex_stansum <- summary(binom1ex_stanfit)
-binom1ex_stansum$summary[1:3]
+binom1ex_stansum$summary[1:3, c(1,3)]
 
 
 ##############################################################################
@@ -197,4 +197,4 @@ binom2ex_stanfit <- stan(file = "experiments/stan/glmm.stan",
                         warmup = 8000, cores = 4)
 
 binom2ex_stansum <- summary(binom2ex_stanfit)
-binom2ex_stansum$summary[1:3]
+binom2ex_stansum$summary[1:3, c(1,3)]
